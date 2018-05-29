@@ -11,14 +11,29 @@
     </div>
   <% end %>
 
-  <div class="field">
+  <div class="form-group">
     <%= form.label :title %>
-    <%= form.text_field :title %>
+    <%= form.text_field :title, class: 'form-control' %>
   </div>
 
-  <div class="field">
+  <div class="form-group">
     <%= form.label :description %>
-    <%= form.text_area :description %>
+    <%= form.text_area :description, class: 'form-control' %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :image %><br>
+    <%= form.file_field :image %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label 'IMDb Page' %>
+    <%= form.text_field :imdb_link, class: 'form-control' %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label 'Rotten Tomatoes Page' %>
+    <%= form.text_field :rt_link, class: 'form-control' %>
   </div>
 
   <div class="actions">
