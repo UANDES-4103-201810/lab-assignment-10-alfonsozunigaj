@@ -1,1 +1,24 @@
-<h1>Hello World</h1>
+<h1>Web Technologies </h1>
+
+<%= link_to 'New Movie', new_movie_path, class: 'btn btn-primary btn-lg' %><br><br>
+
+<% movies = Movie.all %>
+<div class="row">
+  <% movies.each do |movie| %>
+    <div style="border-color:gray; border-style: solid; border-width: 1px; border-radius: 10px; padding: 15px">
+      <div class="card-body">
+        <h2 class="card-title" align="center"><b><%= movie.title %></b></h2>
+        <% movie.comments.each do |comment| %>
+          <p><b><%= comment.user.name %></b> says:</p>
+          <p class="card-text" align="center"><i><%= comment.content %></i></p>
+          <% if current_user == comment.user %>
+            <%= link_to 'Destroy', comment, class: 'btn btn-danger btn-xs', method: :delete, data: { confirm: 'Are you sure?' } %><br><br>
+          <% end %>
+        <% end %>
+      </div>
+      <% if user_signed_in? %>
+        <%= link_to 'New Comment', new_comment_path(movie: movie.id) %>
+      <% end %>
+    </div><br>
+  <% end %>
+</div>
