@@ -1,37 +1,53 @@
 <%= link_to 'New Movie', new_movie_path, class: 'btn btn-primary btn-lg btn-block' %><br><br>
 
 <% movies = Movie.all %>
-<div class="row" style="vertical-align: center">
+<div class="card-columns">
   <% movies.each do |movie| %>
-    <div style="padding-right: 15px; padding-bottom: 15px">
-      <div class="card" style="width:365px">
+    <div>
+      <div class="card">
         <%= image_tag movie.image.url(:medium), alt: 'Card image', width: '100%', class: 'card-img-top' %>
         <div class="card-body">
           <h4 class="card-title"><b><%= movie.title %></b></h4>
           <p class="card-text"><%= movie.description %></p>
-          <div align="center">
-            <a href="<%= movie.imdb_link %>">
-              <%= image_tag('imdb.png', width: '100px') %>
-            </a>
-            <a href="<%= movie.rt_link %>">
-              <%= image_tag('rotten_tomatoes.png', width: '100px') %>
-            </a>
+          <div class="row" align="center">
+            <div class="col" align="center">
+              <div class="btn-group btn-group-lg">
+                <button type="button" class="btn btn-default">
+                  <%= image_tag('imdb.png', class: 'img-fluid') %>
+                </button>
+                <button type="button" class="btn btn-default">
+                  <%= image_tag('rotten_tomatoes.png', class: 'img-fluid') %>
+                </button>
+              </div>
+            </div>
           </div>
           <br>
           <h5><b>Comments</b></h5>
           <% if movie.comments.count == 0 %>
             <p style="font-size: small">No comments</p>
           <% end %>
-          <% movie.comments.each do |comment| %>
-            <p style="font-size: medium"><b><%= comment.user.name %></b> says:</p>
-            <p style="font-size: small" align="center"><i><%= comment.content %></i></p>
-            <% if current_user == comment.user %>
-              <%= link_to 'Destroy', comment, class: 'btn btn-link btn-sm', method: :delete, data: { confirm: 'Are you sure?' } %><br><br>
-            <% end %>
-          <% end %>
-
+          <div id="card_<%= movie.id %>" style="max-height: 400px; overflow-y: auto;">
+            <% movie.comments.each do |comment| %>
+              <div id="<%= movie.id %>_<%= comment.id %>" style="border-bottom: 1px dotted; padding-top: 20px">
+                <p style="font-size: medium"><b><%= comment.user.name %></b> says:</p>
+                <p style="font-size: small" align="center"><i><%= comment.content %></i></p>
+                <% if current_user == comment.user %>
+                  <button class="btn btn-link btn-sm" onclick="delete_comment(<%= movie.id %>, <%= comment.id %>)">Delete</button><br>
+                <% end %>
+              </div>
+              <% end %>
+          </div>
           <% if user_signed_in? %>
-            <%= link_to 'New Comment', new_comment_path(movie: movie.id) %>
+            <div class="col-lg-12" align="center">
+              <div class="row">
+                <div class="col-xs-11" style="margin-right: 23px">
+                  <input id="written_comment_<%= movie.id %>" class="form-control comment_input">
+                </div>
+                <div class="col-xs-1">
+                  <button name="send_button" onclick="add_comment(<%= movie.id %>, <%= current_user.id %>, '<%= current_user.name %>')" value="" class="btn btn-primary btn-block">Send</button>
+                </div>
+              </div>
+            </div>
           <% end %>
         </div>
       </div>
